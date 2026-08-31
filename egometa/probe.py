@@ -113,5 +113,9 @@ def extract_frame(video: Path, t_sec: float, max_side: int = 512, jpeg_q: int = 
         im.save(buf, format="JPEG", quality=jpeg_q, optimize=True)
         return buf.getvalue()
     except Exception as e:
-        log.warning("PIL resize failed for %s: %s", video.name, e)
-        return raw
+        # Do NOT fall back to the raw/unresized frame here: on real footage that can be
+        # several MB (vs. the ~30-100KB a properly resized JPEG produces), which is a
+        # prime suspect for VLM call timeouts. Skip the frame instead.
+        log.warning("PIL resize failed for %s @%.2fs (%d raw bytes), skipping frame: %s",
+                    video.name, t_sec, len(raw), e)
+        return None

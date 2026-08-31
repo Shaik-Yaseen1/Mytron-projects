@@ -32,11 +32,19 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## 3. API keys (choose one backend)
+## 3. Backend setup (choose one)
 
-The tool reads keys from environment variables. Never pass them on the command line.
+**Ollama + Gemma 3 (default, local, no API key):**
+```bash
+# install ollama from https://ollama.com, then:
+ollama serve            # runs the local server (or it may already be running)
+ollama pull gemma3      # vision-capable; gemma3:12b / gemma3:27b for better quality
+```
+Optional overrides: `OLLAMA_MODEL` (default `gemma3`), `OLLAMA_HOST` (default `http://localhost:11434`).
 
-**Gemini (default):**
+The cloud backends below read keys from environment variables. Never pass them on the command line.
+
+**Gemini:**
 ```bash
 export GEMINI_API_KEY="your-gemini-key"
 ```

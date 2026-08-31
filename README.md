@@ -1,6 +1,6 @@
 # EgoCapture Metadata Generator
 
-Generates structured JSON metadata for egocentric (head-mounted camera) video datasets captured with the **EgoCapture-1** device. It probes each video with `ffprobe`, samples representative frames with `ffmpeg`, optionally uses IMU motion data to pick high-activity keyframes, then calls a Vision Language Model (Gemini or Claude) to label actions, objects, sub-tasks, handedness, and task difficulty — all written out as per-video `metadata.json` files.
+Generates structured JSON metadata for egocentric (head-mounted camera) video datasets captured with the **EgoCapture-1** device. It probes each video with `ffprobe`, samples representative frames with `ffmpeg`, optionally uses IMU motion data to pick high-activity keyframes, then calls a Vision Language Model (local Ollama Gemma 3 by default, or Gemini / Claude) to label actions, objects, sub-tasks, handedness, and task difficulty — all written out as per-video `metadata.json` files.
 
 ---
 
@@ -8,7 +8,8 @@ Generates structured JSON metadata for egocentric (head-mounted camera) video da
 
 - Python 3.10+
 - `ffmpeg` and `ffprobe` on your PATH
-- A Gemini **or** Anthropic API key
+- For the default backend: [Ollama](https://ollama.com) running locally with a Gemma 3 model pulled (`ollama pull gemma3`) — no API key needed
+- For cloud backends: a Gemini **or** Anthropic API key
 
 ---
 
@@ -45,7 +46,23 @@ pip install -r requirements.txt
 
 ---
 
-## Environment variables (API keys)
+## Backends
+
+### Ollama + Gemma 3 (default — local, no API key)
+
+```bash
+ollama serve          # start the local server if it isn't running
+ollama pull gemma3    # vision-capable; gemma3:12b / gemma3:27b for better quality
+```
+
+Optional overrides (env or `.env`):
+
+```env
+OLLAMA_MODEL=gemma3
+OLLAMA_HOST=http://localhost:11434
+```
+
+### Gemini / Claude (cloud)
 
 Copy the example file and fill in your key(s):
 
@@ -56,10 +73,8 @@ cp .env.example .env
 Then edit `.env`:
 
 ```env
-# Use Gemini (default)
 GEMINI_API_KEY=your-gemini-api-key-here
-
-# OR use Claude
+# OR
 ANTHROPIC_API_KEY=your-anthropic-api-key-here
 ```
 
@@ -121,7 +136,7 @@ The CLI will prompt you interactively for all other settings:
 | Geohash | auto-derived from city center (7-char base32); editable |
 | Operator age bucket | `18-24` · `25-29` (default) · `30-34` … `60+` |
 | Operator gender | `Male` · `Female` (default) · `Non-binary` · `Prefer not to say` |
-| VLM backend | `gemini` (default) · `claude` |
+| VLM backend | `ollama` (default, local Gemma 3) · `gemini` · `claude` |
 | Frames per VLM call | default `6` |
 | Concurrency | default `6` |
 | Output directory | default `./metadata_out` |

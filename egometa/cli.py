@@ -55,7 +55,7 @@ def _interactive_config(parent_path: Path) -> RunOptions:
     age_range = prompt("Operator age bucket", default="25-29", choices=AGE_BUCKETS)
     gender = prompt("Operator gender", default="Female", choices=GENDERS)
 
-    backend = prompt("VLM backend", default="gemini", choices=["gemini", "claude"])
+    backend = prompt("VLM backend", default="ollama", choices=["ollama", "gemini", "claude"])
     frames_s = prompt("Frames per VLM call (1 call per 10 videos, cloned)", default="6")
     concurrency_s = prompt("Concurrency", default="6")
     output_dir_s = prompt("Output directory", default="./metadata_out")

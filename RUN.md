@@ -18,7 +18,7 @@ You'll then be prompted for:
 | Geohash | **Auto-derived** from city coordinates (7-char base32). Editable, or press Enter to accept |
 | Operator age bucket | 18-24 / 25-29 (default) / 30-34 / 35-39 / 40-44 / 45-49 / 50-54 / 55-59 / 60+ |
 | Operator gender | Male / Female (default) / Non-binary / Prefer not to say |
-| VLM backend | `gemini` (default) or `claude` |
+| VLM backend | `ollama` (default, local Gemma 3) · `gemini` · `claude` |
 | Frames per worker | default 6 |
 | Concurrency | default 6 |
 | Output directory | default `./metadata_out` |
